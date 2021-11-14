@@ -4,6 +4,9 @@ import { Carousel } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { listProducts } from '../actions/productActions'
 import Header from '../components/Header'
+import { Link } from 'react-router-dom'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 const Home = ({history}) => {
   const { Meta } = Card
   
@@ -22,7 +25,7 @@ const Home = ({history}) => {
 
   return (
     <>
-      <Header/>
+      <Header />
       {/* banner section start */}
       <div className='container' id='banner'>
         <div className='d-flex justify-content-center align-items-end h-100 d-inline-block'>
@@ -42,37 +45,47 @@ const Home = ({history}) => {
           <h1 className='text-center text-uppercase'>Products</h1>
         </div>
         <div className='row row-cols-1 row-cols-sm-1 row-cols-md-3'>
-          {drones
-            .map((drone) => (
-              <div className='col' key={drone._id}>
-                <Card
-                  hoverable
-                  cover={
-                    <img
-                      style={{ height: '300px' }}
-                      alt='example'
-                      src={drone.image}
-                      className='img-fluid'
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant='danger'>{error}</Message>
+          ) : (
+            drones
+              .map((drone) => (
+                <div className='col' key={drone._id}>
+                  <Card
+                    hoverable
+                    cover={
+                      <img
+                        style={{ height: '300px' }}
+                        alt='example'
+                        src={drone.image}
+                        className='img-fluid'
+                      />
+                    }
+                    className='my-2 mx-2'
+                  >
+                    <Meta
+                      title={drone.name}
+                      description={drone.description}
+                      className='my-2'
                     />
-                  }
-                  className='my-2 mx-2'
-                >
-                  <Meta
-                    title={drone.name}
-                    description={drone.description}
-                    className='my-2'
-                  />
-                  <p>Price: {drone.price}$</p>
-                  <Button type='primary' block>
-                    Buy Now
-                  </Button>
-                </Card>
-              </div>
-            ))
-            .slice(0, 6)}
+                    <p>Price: {drone.price}$</p>
+                    <Link
+                      to={`/booking/${drone._id}`}
+                      type='button'
+                      className='btn btn-outline-dark d-grid'
+                    >
+                      Buy Now
+                    </Link>
+                  </Card>
+                </div>
+              ))
+              .slice(0, 6)
+          )}
         </div>
       </div>
-      {/* products section start */}
+      {/* products section end */}
       {/* about section start */}
       <div className='container'>
         <div className='row my-5'>

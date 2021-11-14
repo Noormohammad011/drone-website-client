@@ -1,81 +1,133 @@
+import { useState, useEffect } from 'react'
 import {
-  createUserWithEmailAndPassword,
   getAuth,
-  onAuthStateChanged,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
+  onAuthStateChanged,
   updateProfile,
+  getIdToken,
+  signOut,
 } from 'firebase/auth'
-import { useEffect, useState } from 'react'
-
+import Swal from 'sweetalert2'
 import initializeAuthentication from '../Firebase/firebase.init'
-import { useHistory, useLocation } from 'react-router-dom'
+
 //initialize firebase  authentication
 initializeAuthentication()
 
 const useFirebase = () => {
-  const location = useLocation()
-  const history = useHistory()
-  const redirect_url = location.state?.from || '/'
   const [user, setUser] = useState({})
   const [isLoading, setIsLoading] = useState(true)
+  const [authError, setAuthError] = useState('')
+  // const [admin, setAdmin] = useState(false)
+  // const [token, setToken] = useState('')
+
   const auth = getAuth()
-  //on State Change
+
+  const registerUser = (email, password, name, history) => {
+    setIsLoading(true)
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        setAuthError('')
+        const newUser = { email, displayName: name }
+        setUser(newUser)
+        // save user to the database
+        // saveUser(email, name, 'POST')
+        // send name to firebase after creation
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        })
+          .then(() => {})
+          .catch((error) => {})
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Account has been created!',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+
+        history.replace('/')
+      })
+      .catch((error) => {
+        setAuthError(error.message)
+        console.log(error)
+      })
+      .finally(() => setIsLoading(false))
+  }
+
+  const loginUser = (email, password, location, history) => {
+    setIsLoading(true)
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Sign in Successful!',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+        const destination = location?.state?.from || '/'
+        history.replace(destination)
+        setAuthError('')
+      })
+      .catch((error) => {
+        setAuthError(error.message)
+      })
+      .finally(() => setIsLoading(false))
+  }
+
+  // observer user state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribed = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user)
+        // getIdToken(user).then((idToken) => {
+        //   setToken(idToken)
+        // })
       } else {
         setUser({})
       }
       setIsLoading(false)
     })
-    return () => unsubscribe()
-  }, [])
+    return () => unsubscribed
+  }, [auth])
 
-  const createAccountWithGoogle = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password)
-  }
-  const loginWithEmailAndPassword = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password)
-  }
-  const updateName = (name) => {
-    updateProfile(auth.currentUser, {
-      displayName: name,
-    })
-      .then(() => {
-        const newUser = { ...user, displayName: name } // recommend
-        setUser(newUser)
+  // useEffect(() => {
+  //   fetch(`https://stark-caverns-04377.herokuapp.com/users/${user.email}`)
+  //     .then((res) => res.json())
+  //     .then((data) => setAdmin(data.admin))
+  // }, [user.email])
 
-        // ...
-      })
-      .catch((error) => {
-        // An error occurred
-        // ...
-      })
-  }
-  const logOut = () => {
+  const logout = () => {
+    setIsLoading(true)
     signOut(auth)
       .then(() => {
-        setUser({})
-        history.push(redirect_url)
+        // Sign-out successful.
       })
       .catch((error) => {
-        console.log(error)
+        // An error happened.
       })
+      .finally(() => setIsLoading(false))
   }
 
-  // sign out
+  // const saveUser = (email, displayName, method) => {
+  //   const user = { email, displayName }
+  //   fetch('https://stark-caverns-04377.herokuapp.com/users', {
+  //     method: method,
+  //     headers: {
+  //       'content-type': 'application/json',
+  //     },
+  //     body: JSON.stringify(user),
+  //   }).then()
+  // }
 
   return {
     user,
-    setUser,
-    createAccountWithGoogle,
-    loginWithEmailAndPassword,
     isLoading,
-    setIsLoading,
-    logOut,
-    updateName,
+    authError,
+    registerUser,
+    loginUser,
+    logout,
   }
 }
 
