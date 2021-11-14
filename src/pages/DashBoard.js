@@ -1,56 +1,65 @@
-import React from 'react'
-import { Layout, Menu, } from 'antd'
-import { NavLink } from 'react-router-dom'
-import { PieChartOutlined } from '@ant-design/icons'
+import React, { useState } from 'react'
+import { Layout, Menu } from 'antd'
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+  UploadOutlined,
+} from '@ant-design/icons'
+import Pay from './DashboardPages/Pay'
+import MyOrder from './DashboardPages/MyOrder'
+import Review from './DashboardPages/Review'
 
-const DashBoard = ({ location }) => {
-  const { SubMenu } = Menu
-  const { Header, Content, Sider } = Layout
-  console.log(location)
+const DashBoard = () => {
+  const { Header, Sider, Content } = Layout
+
+  const [collapsed, setcollapsed] = useState(false);
+  
+
+  const toggle = () => {
+    setcollapsed(!collapsed);
+  }
   return (
     <Layout>
-      <Header className='header'>
+      <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className='logo' />
-        <Menu
-          theme='dark'
-          mode='horizontal'
-          defaultSelectedKeys={['2']}
-          className='d-flex justify-content-end'
-        >
-          <NavLink to='/'>
-            <Menu.Item key='2'>Home</Menu.Item>
-          </NavLink>
-          <Menu.Item key='3'>Logout</Menu.Item>
+        <Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
+          <Menu.Item key='1' icon={<UserOutlined />}>
+           Nav 1
+          </Menu.Item>
+          <Menu.Item key='2' icon={<VideoCameraOutlined />}>
+            nav 2
+          </Menu.Item>
+          <Menu.Item key='3' icon={<UploadOutlined />}>
+            nav 3
+          </Menu.Item>
         </Menu>
-      </Header>
-      <Content style={{ padding: '0 50px' }}>
-        <Layout
+      </Sider>
+      <Layout className='site-layout'>
+        <Header className='site-layout-background' style={{ padding: 0 }}>
+          <h1 className='text-center text-uppercase'>DashBoard</h1>
+          {React.createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: 'trigger',
+              onClick: toggle,
+            }
+          )}
+        </Header>
+        <Content
           className='site-layout-background'
-          style={{ padding: '24px 0' }}
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            minHeight: '900px',
+          }}
         >
-          <Sider className='site-layout-background' width={200}>
-            <Menu
-              mode='inline'
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              style={{ height: '100%' }}
-            >
-              <Menu.Item key='1' icon={<PieChartOutlined />}>
-                Pay
-              </Menu.Item>
-              <Menu.Item key='1' icon={<PieChartOutlined />}>
-                My Order
-              </Menu.Item>
-              <Menu.Item key='1' icon={<PieChartOutlined />}>
-                Review
-              </Menu.Item>
-            </Menu>
-          </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
-             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio repellendus numquam pariatur, officia, commodi unde fuga perferendis rerum minus aut assumenda? Possimus fugiat enim animi similique veniam? Saepe, natus laboriosam.</p>
-          </Content>
-        </Layout>
-      </Content>
+          <Pay />
+          <MyOrder />
+          <Review/>
+        </Content>
+      </Layout>
     </Layout>
   )
 }
