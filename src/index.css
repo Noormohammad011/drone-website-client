@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&family=New+Rocker&family=Poppins:ital,wght@0,200;1,300;1,400;1,500&family=Tangerine:wght@400;700&display=swap');
+body {
+font-family: 'EB Garamond', serif;
+}
+
+
 main{
   min-height: 130vh;
 }
@@ -29,3 +35,4 @@ main{
 .site-layout .site-layout-background {
   background: #fff;
 }
+

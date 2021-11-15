@@ -1,13 +1,38 @@
-import React, { useEffect } from 'react'
-import { Card, Button } from 'antd'
-import { Carousel } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Card } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { listProducts } from '../actions/productActions'
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-const Home = ({history}) => {
+import Footer from '../components/Footer'
+
+import axios from 'axios'
+const Home = ({ history }) => {
+   const [data, setData] = useState([])
+
+   const [isLoading, setIsLoading] = useState(false)
+   const [isError, setIsError] = useState(false)
+
+   useEffect(() => {
+     const fetchData = async () => {
+       setIsError(false)
+       setIsLoading(true)
+
+       try {
+         const result = await axios.get(`http://localhost:5000/reviews`)
+
+         setData(result.data)
+       } catch (error) {
+         setIsError(true)
+       }
+
+       setIsLoading(false)
+     }
+
+     fetchData()
+   }, [])
   const { Meta } = Card
   
   const dispatch = useDispatch()
@@ -127,64 +152,45 @@ const Home = ({history}) => {
       </div>
       {/* about section end */}
       {/* reviews section start */}
-      <div className='container'>
+      <div className='container mb-5'>
         <div className='row my-5'>
           <h1 className='text-center text-uppercase'>Reveiews</h1>
         </div>
-        <Carousel autoplay>
-          {/* <div className='mx-auto' style={{ height: '300px', width: '300px' }}>
-            <Card
-              hoverable
-              cover={
-                <img
-                  alt='example'
-                  src='https://res.cloudinary.com/noor011/image/upload/v1636740891/drone-image/drone_11_y6rnl0.jpg'
-                  className='img-fluid'
-                />
-              }
-              className='my-2 mx-2'
-            >
-              <Meta
-                title='Europe Street beat'
-                description='chig ching chu'
-                className='my-2'
-              />
-              <p>Price: 880$</p>
-              <Button type='primary' block>
-                Buy Now
-              </Button>
-            </Card>
-          </div> */}
-          <div className='d-flex justify-content-center'>
-            <div>
-              <Card
-                hoverable
-                cover={
-                  <img
-                    alt='example'
-                    src='https://res.cloudinary.com/noor011/image/upload/v1636740891/drone-image/drone_11_y6rnl0.jpg'
-                    className='img-fluid'
-                    style={{ height: '300px', width: '400px' }}
-                  />
-                }
-                className='my-2 mx-2'
-              >
-                <Meta
-                  title='Europe Street beat'
-                  description='chig ching chu'
-                  className='my-2'
-                />
-                <p>Price: 880$</p>
-                <Button type='primary' block>
-                  Buy Now
-                </Button>
-              </Card>
-            </div>
-          </div>
-        </Carousel>
+
+        <div className='row'>
+          {isLoading ? (
+            <Loader />
+          ) : isError ? (
+            <Message variant='danger'>
+              {<div>Something went wrong ...</div>}
+            </Message>
+          ) : (
+            <table striped bordered responsive className='table-sm table'>
+              <thead>
+                <tr>
+                  <th>EMAIL</th>
+                  <th>NAME</th>
+                  <th>RATING</th>
+                  <th>COMMENT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.map((x) => (
+                  <tr key={x._id}>
+                    <td>{x.email}</td>
+                    <td>{x.userName}</td>
+                    <td>{x.rating}</td>
+                    <td>{x.comment}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
 
       {/* reviews section end */}
+      <Footer />
     </>
   )
 }

@@ -32,6 +32,9 @@ const Header = () => {
             {user?.email ? (
               <>
                 <li className='nav-item'>
+                  <h4>Welcome {user?.displayName}</h4>
+                </li>
+                <li className='nav-item'>
                   <Link to='/dashboard' className='nav-link' href='#'>
                     Dashboard
                   </Link>

@@ -5,7 +5,6 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
-  getIdToken,
   signOut,
 } from 'firebase/auth'
 import Swal from 'sweetalert2'

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 const AddProduct = () => {
-  const { register, handleSubmit, errors, reset } = useForm()
+  const { register, handleSubmit, reset } = useForm()
   const onSubmit = async (data) => {
     await axios.post(`http://localhost:5000/drones`, data).then((res) => {
       if (res.data.insertedId) {

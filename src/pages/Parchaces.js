@@ -11,8 +11,7 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 const Parchaces = () => {
-
-   const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset } = useForm()
   const { user } = useAuth()
   const { id } = useParams()
 
@@ -23,9 +22,7 @@ const Parchaces = () => {
     dispatch(listProductDetails(id))
   }, [dispatch, id])
 
-  
   const onSubmit = async (data) => {
-  
     await axios
       .post(`http://localhost:5000/orders`, {
         email: user?.email,
@@ -34,22 +31,19 @@ const Parchaces = () => {
         country: data.country,
         phone: data.phone,
         zip: data.zip,
-        droneId: drone._id,
-        userId: user._id,
         price: drone.price,
         name: drone.name,
-        date: new Date().toLocaleDateString(),
         pending: true,
       })
       .then((res) => {
         if (res.data.insertedId) {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Thank You for Purchasing',
-          showConfirmButton: false,
-          timer: 1500,
-        })
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Thank You for Purchasing',
+            showConfirmButton: false,
+            timer: 1500,
+          })
           reset()
         }
       })
