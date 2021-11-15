@@ -10,16 +10,26 @@ import {
 } from 'firebase/auth'
 import Swal from 'sweetalert2'
 import initializeAuthentication from '../Firebase/firebase.init'
+import { useLocation, useHistory } from 'react-router-dom'
 
 //initialize firebase  authentication
 initializeAuthentication()
 
 const useFirebase = () => {
+    
+
+
+
   const [user, setUser] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [authError, setAuthError] = useState('')
-  // const [admin, setAdmin] = useState(false)
+  const [admin, setAdmin] = useState(false)
   // const [token, setToken] = useState('')
+
+
+  const location = useLocation()
+  const history = useHistory()
+  const redirect_url = location.state?.from || '/'
 
   const auth = getAuth()
 
@@ -30,8 +40,8 @@ const useFirebase = () => {
         setAuthError('')
         const newUser = { email, displayName: name }
         setUser(newUser)
-        // save user to the database
-        // saveUser(email, name, 'POST')
+       // save user to the database
+        saveUser(email, name, 'POST')
         // send name to firebase after creation
         updateProfile(auth.currentUser, {
           displayName: name,
@@ -92,17 +102,18 @@ const useFirebase = () => {
     return () => unsubscribed
   }, [auth])
 
-  // useEffect(() => {
-  //   fetch(`https://stark-caverns-04377.herokuapp.com/users/${user.email}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setAdmin(data.admin))
-  // }, [user.email])
+  useEffect(() => {
+    fetch(`http://localhost:5000/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => setAdmin(data.admin))
+  }, [user.email])
 
   const logout = () => {
     setIsLoading(true)
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
+        setUser({})
+        history.push(redirect_url)
       })
       .catch((error) => {
         // An error happened.
@@ -110,19 +121,20 @@ const useFirebase = () => {
       .finally(() => setIsLoading(false))
   }
 
-  // const saveUser = (email, displayName, method) => {
-  //   const user = { email, displayName }
-  //   fetch('https://stark-caverns-04377.herokuapp.com/users', {
-  //     method: method,
-  //     headers: {
-  //       'content-type': 'application/json',
-  //     },
-  //     body: JSON.stringify(user),
-  //   }).then()
-  // }
+  const saveUser = (email, displayName, method) => {
+    const user = { email, displayName }
+    fetch('http://localhost:5000/users', {
+      method: method,
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    }).then()
+  }
 
   return {
     user,
+    admin,
     isLoading,
     authError,
     registerUser,

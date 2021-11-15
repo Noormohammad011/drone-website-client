@@ -16,15 +16,17 @@ const App = () => {
       <AuthProvider>
         <Switch>
           <Route path='/' component={Home} exact />
-          <Route path='/home' component={Home} exact />
-          <Route path='/products' component={Products} exact />
-          <Route path='/dashboard' component={DashBoard} exact />
-          <PrivateRoute exact path='/booking/:id'>
+          <Route path='/home' component={Home}  />
+          <Route path='/products' component={Products} />
+          <Route path='/dashboard' >
+            <DashBoard></DashBoard>
+          </Route>
+          <PrivateRoute path='/booking/:id'>
             <Parchaces></Parchaces>
           </PrivateRoute>
 
-          <Route path='/login' component={Login} exact />
-          <Route path='/register' component={Registration} exact />
+          <Route path='/login' component={Login}  />
+          <Route path='/register' component={Registration}  />
 
           {/* <Route path='/addTouristPlace' component={AddTouristPlace} exact />
             <Route

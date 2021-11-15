@@ -43,7 +43,6 @@ const { register, handleSubmit, reset } = useForm()
               className='form-control'
               id='inputRating'
               type='number'
-              name='quantity'
               min='1'
               max='5'
               name='rating'
