@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import Loader from '../../components/Loader'
@@ -74,7 +74,7 @@ const ManageProducts = () => {
                 <td>{x.description}</td>
                 <td>{x.price}</td>
                 <td>
-                  <NavLink to={`/getAllTouristPlace/${x._id}/edit`}>
+                  <NavLink to={`/dashboard/drones/${x._id}/edit`}>
                     <button type='button' className='btn-sm btn btn-light'>
                       <i className='fas fa-edit'></i>
                     </button>

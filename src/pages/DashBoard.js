@@ -13,6 +13,7 @@ import AdminRoute from '../PrivateRoute/AdminRoute'
 import AddProduct from './DashboardPages/AddProduct'
 import AllOrders from './DashboardPages/AllOrders'
 import ManageProducts from './DashboardPages/ManageProducts'
+import EditDrones from './DashboardPages/EditDrones'
 
 const DashBoard = () => {
   const { admin, logout } = useAuth()
@@ -91,12 +92,12 @@ const DashBoard = () => {
             minHeight: '900px',
           }}
         >
-          {/* <Pay />
-          <MyOrder />
-          <Review /> */}
           <>
             <Switch>
-              <Route exact path={`${path}/myorder`}>
+              <Route path={`${path}`} exact>
+                <MyOrder />
+              </Route>
+              <Route path={`${path}/myorder`} exact>
                 <MyOrder />
               </Route>
               <Route path={`${path}/pay`}>
@@ -117,9 +118,9 @@ const DashBoard = () => {
               <AdminRoute path={`${path}/manageProducts`}>
                 <ManageProducts />
               </AdminRoute>
-              <Route exact path={`${path}`}>
-                <MyOrder />
-              </Route>
+              <AdminRoute path={`${path}/drones/:id/edit`}>
+                <EditDrones />
+              </AdminRoute>
             </Switch>
           </>
         </Content>
