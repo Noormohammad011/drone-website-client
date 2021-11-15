@@ -3,6 +3,8 @@ import { Card } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { listProducts } from '../actions/productActions'
 import Header from '../components/Header'
+import Rating from '../components/Rating'
+
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -179,7 +181,9 @@ const Home = ({ history }) => {
                   <tr key={x._id}>
                     <td>{x.email}</td>
                     <td>{x.userName}</td>
-                    <td>{x.rating}</td>
+                    <td>
+                      <Rating value={parseFloat(x.rating)} />
+                    </td>
                     <td>{x.comment}</td>
                   </tr>
                 ))}
