@@ -5,18 +5,20 @@ import Swal from 'sweetalert2'
 const AddProduct = () => {
   const { register, handleSubmit, reset } = useForm()
   const onSubmit = async (data) => {
-    await axios.post(`http://localhost:5000/drones`, data).then((res) => {
-      if (res.data.insertedId) {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Adding Product Successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        })
-        reset()
-      }
-    })
+    await axios
+      .post(`https://damp-savannah-22237.herokuapp.com/drones`, data)
+      .then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Adding Product Successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+          reset()
+        }
+      })
   }
   return (
     <div className='container my-3'>
@@ -72,7 +74,6 @@ const AddProduct = () => {
               {...register('price')}
             />
           </div>
-
 
           <div className='col-12'>
             <button type='submit' className='btn btn-primary'>

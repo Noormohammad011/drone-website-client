@@ -15,16 +15,11 @@ import { useLocation, useHistory } from 'react-router-dom'
 initializeAuthentication()
 
 const useFirebase = () => {
-    
-
-
-
   const [user, setUser] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [authError, setAuthError] = useState('')
   const [admin, setAdmin] = useState(false)
   // const [token, setToken] = useState('')
-
 
   const location = useLocation()
   const history = useHistory()
@@ -39,7 +34,7 @@ const useFirebase = () => {
         setAuthError('')
         const newUser = { email, displayName: name }
         setUser(newUser)
-       // save user to the database
+        // save user to the database
         saveUser(email, name, 'POST')
         // send name to firebase after creation
         updateProfile(auth.currentUser, {
@@ -102,7 +97,7 @@ const useFirebase = () => {
   }, [auth])
 
   useEffect(() => {
-    fetch(`http://localhost:5000/users/${user.email}`)
+    fetch(`https://damp-savannah-22237.herokuapp.com/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => setAdmin(data.admin))
   }, [user.email])
@@ -122,7 +117,7 @@ const useFirebase = () => {
 
   const saveUser = (email, displayName, method) => {
     const user = { email, displayName }
-    fetch('http://localhost:5000/users', {
+    fetch('https://damp-savannah-22237.herokuapp.com/users', {
       method: method,
       headers: {
         'content-type': 'application/json',

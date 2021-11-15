@@ -1,36 +1,35 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import Loader from '../../components/Loader'
 import Message from '../../components/Message'
 import Swal from 'sweetalert2'
 
-
 const ManageProducts = () => {
   const productList = useSelector((state) => state.productList)
   const { loading, error, drones } = productList
   const [data, setData] = useState(drones)
   const deleteHandler = (id) => {
-    const url = `http://localhost:5000/drones/${id}`
+    const url = `https://damp-savannah-22237.herokuapp.com/drones/${id}`
     fetch(url, {
       method: 'DELETE',
     })
       .then((res) => res.json())
       .then((d) => {
         if (d.deletedCount) {
-         Swal.fire({
-           title: 'Are you sure?',
-           text: "You won't be able to revert this!",
-           icon: 'warning',
-           showCancelButton: true,
-           confirmButtonColor: '#3085d6',
-           cancelButtonColor: '#d33',
-           confirmButtonText: 'Yes, delete it!',
-         }).then((result) => {
-           if (result.isConfirmed) {
-             Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
-           }
-         })
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            }
+          })
           const remaining = data.filter((s) => s._id !== id)
           setData(remaining)
         }

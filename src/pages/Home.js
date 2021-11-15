@@ -12,43 +12,41 @@ import Footer from '../components/Footer'
 
 import axios from 'axios'
 const Home = ({ history }) => {
-   const [data, setData] = useState([])
+  const [data, setData] = useState([])
 
-   const [isLoading, setIsLoading] = useState(false)
-   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
 
-   useEffect(() => {
-     const fetchData = async () => {
-       setIsError(false)
-       setIsLoading(true)
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsError(false)
+      setIsLoading(true)
 
-       try {
-         const result = await axios.get(`http://localhost:5000/reviews`)
+      try {
+        const result = await axios.get(
+          `https://damp-savannah-22237.herokuapp.com/reviews`
+        )
 
-         setData(result.data)
-       } catch (error) {
-         setIsError(true)
-       }
+        setData(result.data)
+      } catch (error) {
+        setIsError(true)
+      }
 
-       setIsLoading(false)
-     }
+      setIsLoading(false)
+    }
 
-     fetchData()
-   }, [])
+    fetchData()
+  }, [])
   const { Meta } = Card
-  
+
   const dispatch = useDispatch()
 
-  
   const productList = useSelector((state) => state.productList)
-  const { loading, error, drones} = productList
-
-  
+  const { loading, error, drones } = productList
 
   useEffect(() => {
     dispatch(listProducts())
   }, [dispatch])
-
 
   return (
     <>

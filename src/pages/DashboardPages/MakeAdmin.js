@@ -2,33 +2,33 @@ import React, { useState } from 'react'
 import Message from '../../components/Message'
 
 const MakeAdmin = () => {
-    const [email, setEmail] = useState('')
-    const [success, setSuccess] = useState(false)
-    // const { token } = useAuth()
+  const [email, setEmail] = useState('')
+  const [success, setSuccess] = useState(false)
+  // const { token } = useAuth()
 
-    const handleOnBlur = (e) => {
-      setEmail(e.target.value)
-    }
-    const handleAdminSubmit = (e) => {
-      const user = { email }
-      fetch('http://localhost:5000/users/admin', {
-        method: 'PUT',
-        headers: {
+  const handleOnBlur = (e) => {
+    setEmail(e.target.value)
+  }
+  const handleAdminSubmit = (e) => {
+    const user = { email }
+    fetch('https://damp-savannah-22237.herokuapp.com/users/admin', {
+      method: 'PUT',
+      headers: {
         //   authorization: `Bearer ${token}`,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(user),
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount) {
+          console.log(data)
+          setSuccess(true)
+        }
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.modifiedCount) {
-            console.log(data)
-            setSuccess(true)
-          }
-        })
 
-      e.preventDefault()
-    }
+    e.preventDefault()
+  }
   return (
     <div className='container my-5'>
       <h1 className='text-center text-uppercase my-2'>Make Admin</h1>
@@ -49,7 +49,11 @@ const MakeAdmin = () => {
           Make Admin
         </button>
       </form>
-      {success && <Message variant='success'>{<div>Admin Created Successfully</div>}</Message>}
+      {success && (
+        <Message variant='success'>
+          {<div>Admin Created Successfully</div>}
+        </Message>
+      )}
     </div>
   )
 }

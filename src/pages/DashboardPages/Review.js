@@ -6,10 +6,10 @@ import Swal from 'sweetalert2'
 
 const Review = () => {
   const { user } = useAuth()
-const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset } = useForm()
   const onSubmit = async (data) => {
     await axios
-      .post(`http://localhost:5000/reviews`, {
+      .post(`https://damp-savannah-22237.herokuapp.com/reviews`, {
         email: user?.email,
         userName: user?.displayName,
         rating: data.rating,

@@ -61,7 +61,7 @@ const EditDrones = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    const url = `http://localhost:5000/drones/${id}`
+    const url = `https://damp-savannah-22237.herokuapp.com/drones/${id}`
     fetch(url, {
       method: 'PUT',
       headers: {

@@ -24,7 +24,7 @@ const Parchaces = () => {
 
   const onSubmit = async (data) => {
     await axios
-      .post(`http://localhost:5000/orders`, {
+      .post(`https://damp-savannah-22237.herokuapp.com/orders`, {
         email: user?.email,
         address: data.address,
         city: data.city,
